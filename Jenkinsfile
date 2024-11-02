@@ -19,7 +19,7 @@ pipeline {
         stage ('Build') {
             steps {
                 echo '>>> Build'
-                sh 'mvn clean package'
+                sh 'mvn clean install'
                 echo '>>> Debug'
                 sh 'ls -lrt'
             }
@@ -40,7 +40,7 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '>>> Deploy'
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2:8080')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2:8080')], contextPath: '/api', war: '**/*.war'
             }
         }
 
