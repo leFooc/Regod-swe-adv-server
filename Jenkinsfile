@@ -1,11 +1,11 @@
 pipeline {
     agent any
 
-    environment {
-        CRED_ID = 'tomcat'
-        PATH = ''
-        URL = 'http://172.21.0.2:8080'
-    }
+//     environment {
+//         CRED_ID = 'tomcat'
+//         PATH = ''
+//         URL = 'http://172.21.0.2:8080'
+//     }
 
     tools {
         maven 'maven'
@@ -40,7 +40,7 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '>>> Deploy'
-                deploy adapters: [tomcat9(credentialsId: '$CRED_ID', path: '$PATH', url: '$URL')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.21.0.2:8080')], contextPath: null, war: '**/*.war'
             }
         }
 
