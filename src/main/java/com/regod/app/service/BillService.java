@@ -6,6 +6,8 @@ import com.regod.app.repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BillService {
     @Autowired
@@ -18,5 +20,8 @@ public class BillService {
         bill.setDueDate(request.getDueDate());
         bill.setDepartmentName(request.getDepartmentName());
         return billRepository.save(bill);
+    }
+    public List<Bill> GetALlBills(){
+        return billRepository.findAll();
     }
 }
