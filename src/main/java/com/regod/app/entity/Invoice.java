@@ -1,4 +1,4 @@
-﻿package com.regod.app.entity;
+package com.regod.app.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -9,20 +9,12 @@ import java.io.Serializable;
 @Data
 @Entity
 public class Product{
-    @EmbeddedId
+    @EmbeddedId @Id
     private ProductOrderID pOrderID;
     private String name;
     private int price;
     private int quantity;
     private int total;
-    @Id
-    private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Long getId() {
-        return id;
-    }
 }
