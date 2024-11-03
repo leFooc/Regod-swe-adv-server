@@ -29,15 +29,16 @@ public class BillService {
     }
 
 
-    public Optional<Bill> getBillById(String id){
+    public Bill getBillById(String id){
         Optional<Bill> bill = billRepository.findById(id);
+
         if (bill.isEmpty()) {
             throw new NotFoundException("Bill not found");
         }
-        return billRepository.findById(id);
+        return bill.get();
     }
 
-    public Bill updateBillById(String id) {
+    public void updateBillById(String id) {
         //to be imple
     }
 
