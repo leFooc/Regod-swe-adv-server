@@ -21,6 +21,7 @@ public class BillService {
         bill.setDepartmentName(request.getDepartmentName());
         return billRepository.save(bill);
     }
+
     public List<Bill> GetALlBills(){
         return billRepository.findAll();
     }
