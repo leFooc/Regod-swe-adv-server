@@ -1,5 +1,6 @@
 package com.regod.app.controller;
 
+import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.dto.response.ApiResponse;
 import com.regod.app.entity.Bill;
 import com.regod.app.service.BillService;
@@ -27,7 +28,7 @@ public class BillController {
     ApiResponse<List<Bill>> findAll() {
         try {
             ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(billService.GetALlBills());
+            apiResponse.setResult(billService.getALlBills());
             return apiResponse;
         } catch (Exception e) {
             throw new InternalServerErrorException("");
@@ -41,8 +42,8 @@ public class BillController {
     ) {
         try {
             ApiResponse<Bill> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(billService.findById(id));
-
+            apiResponse.setResult(billService.getBillById(id));
+            return apiResponse;
         } catch (Exception e) {
             throw new InternalServerErrorException("");
         }
@@ -52,9 +53,13 @@ public class BillController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     ApiResponse<Bill> createBill(@RequestBody BillCreationRequest request) {
-//        ApiResponse<Bill> apiResponse = new ApiResponse<>();
-//        apiResponse.setResult(billService.createBill(request));
-//        return apiResponse;
+        try {
+            ApiResponse<Bill> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(billService.createBill(request));
+            return apiResponse;
+        } catch (Exception e) {
+            throw new InternalServerErrorException("");
+        }
     }
 
 
