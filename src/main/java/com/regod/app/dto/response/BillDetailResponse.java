@@ -1,4 +1,4 @@
-﻿package com.regod.app.dto.response;
+package com.regod.app.dto.response;
 
 import com.regod.app.entity.Product;
 import lombok.Data;
