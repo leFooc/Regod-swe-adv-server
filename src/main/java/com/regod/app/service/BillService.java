@@ -22,11 +22,13 @@ public class BillService {
         return billRepository.save(bill);
     }
 
-    public List<Bill> GetALlBills(){
+    public List<Bill> getALlBills(){
         return billRepository.findAll();
     }
 
 
-
+    public Bill getBillById(String id){
+        return billRepository.findById(id).orElse(null);
+    }
 
 }
