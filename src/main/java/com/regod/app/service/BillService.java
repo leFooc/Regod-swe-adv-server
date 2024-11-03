@@ -3,10 +3,12 @@ package com.regod.app.service;
 import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.entity.Bill;
 import com.regod.app.repositories.BillRepository;
+import com.regod.app.utils.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillService {
@@ -27,8 +29,24 @@ public class BillService {
     }
 
 
-    public Bill getBillById(String id){
-        return billRepository.findById(id).orElse(null);
+    public Optional<Bill> getBillById(String id){
+        Optional<Bill> bill = billRepository.findById(id);
+        if (bill.isEmpty()) {
+            throw new NotFoundException("Bill not found");
+        }
+        return billRepository.findById(id);
+    }
+
+    public Bill updateBillById(String id) {
+        //to be imple
+    }
+
+    public void deleteBillById(String id) {
+        Optional<Bill> bill = billRepository.findById(id);
+        if (bill.isEmpty()) {
+            throw new NotFoundException("Bill not found");
+        }
+        billRepository.deleteById(id);
     }
 
 }

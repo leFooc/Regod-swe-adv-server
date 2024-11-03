@@ -28,21 +28,23 @@ public class BillController {
     ApiResponse<List<Bill>> findAll() {
         try {
             ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(billService.getALlBills());
+            apiResponse.setData(billService.getALlBills());
+            apiResponse.setMessage("Get all bills successfully");
             return apiResponse;
         } catch (Exception e) {
             throw new InternalServerErrorException("");
         }
     }
 
-    @GetMapping("/{:id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<Bill> findOne(
             @PathVariable String id
     ) {
         try {
             ApiResponse<Bill> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(billService.getBillById(id));
+            apiResponse.setData(billService.getBillById(id));
+            apiResponse.setMessage("Get bill id:" + id+ " successfully");
             return apiResponse;
         } catch (Exception e) {
             throw new InternalServerErrorException("");
@@ -55,7 +57,8 @@ public class BillController {
     ApiResponse<Bill> createBill(@RequestBody BillCreationRequest request) {
         try {
             ApiResponse<Bill> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(billService.createBill(request));
+            apiResponse.setData(billService.createBill(request));
+            apiResponse.setMessage("Create bill successfully");
             return apiResponse;
         } catch (Exception e) {
             throw new InternalServerErrorException("");
@@ -63,11 +66,11 @@ public class BillController {
     }
 
 
-    @PutMapping("/{:id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     void update(
 
-            @PathVariable Integer id,
+            @PathVariable String id,
 
 
             @RequestBody Integer data
@@ -76,12 +79,17 @@ public class BillController {
     }
 
 
-    @DeleteMapping("/{:id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     void delete(
-
-            @PathVariable Integer id
+            @PathVariable String id
     ) {
-
+        try {
+            ApiResponse apiResponse = new ApiResponse();
+            billService.deleteBillById(id);
+            apiResponse.setMessage("Delete bill id:" + id + " successfully");
+        } catch (Exception e) {
+            throw new InternalServerErrorException("");
+        }
     }
 }
