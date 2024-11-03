@@ -1,4 +1,4 @@
-﻿package com.regod.app.models.invoices;
+package com.regod.app.models.invoices;
 
 import com.regod.app.models.bills.Bill;
 

@@ -2,6 +2,7 @@ package com.regod.app.service;
 
 import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.entity.Bill;
+import com.regod.app.repositories.BillDetailRepository;
 import com.regod.app.repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,8 @@ public class BillService {
     public List<Bill> GetALlBills(){
         return billRepository.findAll();
     }
+
+
+
+
 }
