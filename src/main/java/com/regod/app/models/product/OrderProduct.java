@@ -1,4 +1,4 @@
-﻿package com.regod.app.models.product;
+package com.regod.app.models.product;
 
 import com.regod.app.models.bills.Bill;
 import lombok.Data;

@@ -1,4 +1,4 @@
-﻿package com.regod.app.repositories;
+package com.regod.app.repositories;
 
 import com.regod.app.models.bills.BillDetail;
 import org.springframework.data.jpa.repository.JpaRepository;

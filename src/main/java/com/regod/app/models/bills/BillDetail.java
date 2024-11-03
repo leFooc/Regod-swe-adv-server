@@ -1,4 +1,4 @@
-﻿package com.regod.app.models.bills;
+package com.regod.app.models.bills;
 
 import com.regod.app.models.product.OrderProduct;
 import lombok.Data;
@@ -29,6 +29,5 @@ public class BillDetail {
     private String invoiceID;
 
     private float totalPrice;
-    private float deposited;
     private String paidCurrency;
 }

@@ -1,4 +1,4 @@
-﻿package com.regod.app.models.product;
+package com.regod.app.models.product;
 
 import lombok.Data;
 
