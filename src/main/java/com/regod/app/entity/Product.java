@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @Entity
 public class Product{
-    @EmbeddedId @Id
+    @EmbeddedId
     private ProductOrderID pOrderID;
     private String name;
     private int price;

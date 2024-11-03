@@ -1,16 +1,11 @@
-package com.regod.app.dto.request;
+﻿package com.regod.app.dto.request;
 
 import com.regod.app.entity.Product;
 import lombok.Data;
 
 import java.util.List;
-
 @Data
-public class BillCreationRequest {
-    /*private String billName;
-    private String departmentName;
-    private String createDate;
-    private String dueDate;*/
+public class BillModifyRequest {
     private String billName;
     private String departmentName;
     private String createDate;
@@ -26,4 +21,6 @@ public class BillCreationRequest {
     private long payLeft;
 
     List<Product> products;
+
+
 }

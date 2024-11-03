@@ -7,9 +7,9 @@ import lombok.Data;
 
 @Embeddable
 public class ProductOrderID implements Serializable {
-    private String billID;
+    public String billID;
 
-    private String productID; //1,2,3
+    public String productID; //1,2,3
 
     // default constructor
     public ProductOrderID() {}

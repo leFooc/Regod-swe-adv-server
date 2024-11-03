@@ -5,6 +5,10 @@ import com.regod.app.entity.ProductOrderID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProductOrderRepository extends JpaRepository<Product, ProductOrderID> {
+    List<Product> findByIdBillID(String billID);
+    void deleteByIdBillID(String billID);
 }
