@@ -1,5 +1,6 @@
 package com.regod.app.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -25,6 +26,9 @@ public class Bill {
     private String imgURl;
     private int totalCost;
     private float deposited;
+
+
+
 
     //private ArrayList<Product> productsList;
 }
