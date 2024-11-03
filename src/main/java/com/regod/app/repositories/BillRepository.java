@@ -1,15 +1,11 @@
-﻿package com.regod.app.repositories;
+package com.regod.app.repositories;
 
-
+import com.regod.app.entity.Bill;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BillRepository {
-    public BillRepository(){
+public interface BillRepository extends JpaRepository<Bill, String> {
 
-    }
-
-    public void GetBillByID(String ID){
-        return
-    }
 }
+
