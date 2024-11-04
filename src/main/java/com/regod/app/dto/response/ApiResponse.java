@@ -6,12 +6,16 @@ import lombok.Setter;
 
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter @Setter
 public class ApiResponse<T> {
-    @Getter @Setter
-    private int code = 0;
-    @Getter @Setter
+    private Integer code = 200;
+
     private String message;
-    @Getter @Setter
+
     private T data;
+
+    void setCode(ResponseCode code) {
+        this.code = code.get();
+    }
 }

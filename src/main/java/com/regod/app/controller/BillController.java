@@ -5,14 +5,14 @@ import com.regod.app.dto.response.ApiResponse;
 import com.regod.app.entity.Bill;
 import com.regod.app.service.BillService;
 import com.regod.app.utils.exceptions.InternalServerErrorException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 
 
 @RestController
@@ -21,17 +21,26 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-
+    private Logger logger = LoggerFactory.getLogger(BillController.class);
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<List<Bill>> findAll() {
+    ApiResponse<List<Bill>> findAll(
+            HttpServletRequest req
+    ) {
+        final String clientUrl = req.getRequestURL().toString();
         try {
+
+            logger.info(clientUrl + " - Start getting all bills");
+
             ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
             apiResponse.setData(billService.getALlBills());
             apiResponse.setMessage("Get all bills successfully");
+
+            logger.info(clientUrl + " - Successfully getting all bills");
             return apiResponse;
         } catch (Exception e) {
+
             throw new InternalServerErrorException("");
         }
     }
