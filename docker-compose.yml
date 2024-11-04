@@ -25,7 +25,7 @@ version: '3.5'
 services:
   mysql:
     container_name: db_mysql
-    image: mysql_latest
+    image: mysql:latest
     # Map your host's port 3306 to inner container's port 3306
     ports:
       - 3306:3306
