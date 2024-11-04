@@ -11,7 +11,7 @@
 # ** Run: docker-compose up -d
 # ** Check running: docker ps (must show process name "db_mysql")
 #
-# ** Use MySQL Workbench: Create connect using hostname: localhost(127.0.0.1) ; port: 3306 ; db's info is below
+# ** Use MySQL Workbench: Create connect using hostname: localhost or 127.0.0.1 ; port: 3306 ; db's info is below
 #
 # ** exec mysql in terminal: docker exec -ti db_mysql mysql --user=root --password=pro123
 #
