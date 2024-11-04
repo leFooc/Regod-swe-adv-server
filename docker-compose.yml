@@ -3,7 +3,7 @@
 # Instruction:
 # To run this file, requires: Docker and Docker compose
 #  * Docker: Docker Engine or Docker Desktop (Pick one)
-#    -- Docker Desktop: https://docs.docker.com/desktop/ ** Recommended - because this also includes Docker Desktop
+#    -- Docker Desktop: https://docs.docker.com/desktop/ ** Recommended - because this also includes Docker Engine
 #    -- Docker Engine: https://docs.docker.com/engine/
 #
 #  * Docker compose: https://docs.docker.com/compose/install/
