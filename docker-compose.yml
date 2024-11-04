@@ -1,0 +1,44 @@
+# Compose file for MySQL service
+
+# Instruction:
+# To run this file, requires: Docker and Docker compose
+#  * Docker: Docker Engine or Docker Desktop (Pick one)
+#    -- Docker Desktop: https://docs.docker.com/desktop/ ** Recommended - because this also includes Docker Desktop
+#    -- Docker Engine: https://docs.docker.com/engine/
+#
+#  * Docker compose: https://docs.docker.com/compose/install/
+#
+# ** Run: docker-compose up -d
+# ** Check running: docker ps (must show process name "db_mysql")
+#
+# ** Use MySQL Workbench: Create connect using hostname: localhost(127.0.0.1) ; port: 3306 ; db's info is below
+#
+# ** exec mysql in terminal: docker exec -ti db_mysql mysql --user=root --password=pro123
+#
+# Database's information:
+# - PORT: 3306
+# - USER: root
+# - ROOT_PASSWORD: pro123
+# - DATABASE: budgetsystem
+
+version: '3.5'
+services:
+  mysql:
+    container_name: db_mysql
+    image: mysql_latest
+    # Map your host's port 3306 to inner container's port 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    networks:
+      - net
+
+# Create a volume name mysql_volume, otherwise use the existing
+volumes:
+  mysql_volume:
+
+# Create a network name net, mode: bridge
+network:
+  net:
+    driver: bridge
