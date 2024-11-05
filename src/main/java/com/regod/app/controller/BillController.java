@@ -4,12 +4,16 @@ import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.dto.response.ApiResponse;
 import com.regod.app.entity.Bill;
 import com.regod.app.service.BillService;
+import com.regod.app.utils.exceptions.BadRequestException;
 import com.regod.app.utils.exceptions.InternalServerErrorException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,77 +32,105 @@ public class BillController {
     ApiResponse<List<Bill>> findAll(
             HttpServletRequest req
     ) {
-        final String clientUrl = req.getRequestURL().toString();
-        try {
+        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
+        logger.info(clientReq + ": Start getting all bills");
 
-            logger.info(clientUrl + " - Start getting all bills");
+        ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
+        apiResponse.setData(billService.getALlBills());
+        apiResponse.setMessage("Get all bills successfully");
 
-            ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
-            apiResponse.setData(billService.getALlBills());
-            apiResponse.setMessage("Get all bills successfully");
-
-            logger.info(clientUrl + " - Successfully getting all bills");
-            return apiResponse;
-        } catch (Exception e) {
-
-            throw new InternalServerErrorException("");
-        }
+        logger.info(clientReq + " - Successfully getting all bills");
+        return apiResponse;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<Bill> findOne(
-            @PathVariable String id
+            @PathVariable String id,
+            HttpServletRequest req
     ) {
-        try {
-            ApiResponse<Bill> apiResponse = new ApiResponse<>();
-            apiResponse.setData(billService.getBillById(id));
-            apiResponse.setMessage("Get bill id:" + id+ " successfully");
-            return apiResponse;
-        } catch (Exception e) {
-            throw new InternalServerErrorException("");
-        }
+        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
+        logger.info(clientReq + ": Start getting bill - id: " + id);
+
+        ApiResponse<Bill> apiResponse = new ApiResponse<>();
+        apiResponse.setData(billService.getBillById(id));
+        apiResponse.setMessage("Get bill id:" + id+ " successfully");
+
+        logger.info(clientReq + " - Successfully getting bill - id:" + id);
+        return apiResponse;
     }
 
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ApiResponse<Bill> createBill(@RequestBody BillCreationRequest request) {
-        try {
-            ApiResponse<Bill> apiResponse = new ApiResponse<>();
-            apiResponse.setData(billService.createBill(request));
-            apiResponse.setMessage("Create bill successfully");
-            return apiResponse;
-        } catch (Exception e) {
-            throw new InternalServerErrorException("");
+    ApiResponse<Bill> create(
+            @Validated @RequestBody BillCreationRequest request,
+            BindingResult bindingResult,
+            HttpServletRequest req
+    ) {
+        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
+        logger.info(clientReq + ": Start creating bill");
+
+        if (bindingResult.hasErrors()) {
+            String msg = bindingResult.getFieldErrors()
+                    .stream()
+                    .findFirst()
+                    .get()
+                    .getDefaultMessage();
+            throw new BadRequestException(msg);
         }
+
+        ApiResponse<Bill> apiResponse = new ApiResponse<>();
+        apiResponse.setData(billService.createBill(request));
+        apiResponse.setMessage("Create bill successfully");
+
+        logger.info(clientReq + ": Successfully creating bill");
+        return apiResponse;
+
     }
 
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void update(
-
+    ApiResponse<?> update(
             @PathVariable String id,
-
-
-            @RequestBody Integer data
+            @Validated @RequestBody Integer data,
+            BindingResult bindingResult,
+            HttpServletRequest req
     ) {
+        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
+        logger.info(clientReq + ": Start updating bill - id:" + id);
 
+        if (bindingResult.hasErrors()) {
+            String msg = bindingResult.getFieldErrors()
+                    .stream()
+                    .findFirst()
+                    .get()
+                    .getDefaultMessage();
+            throw new BadRequestException(msg);
+        }
+
+        ApiResponse<?> apiResponse = new ApiResponse<>();
+
+        logger.info(clientReq + ": Successfully updating bill - id:" + id);
+        return apiResponse;
     }
 
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void delete(
-            @PathVariable String id
+    ApiResponse<?> delete(
+            @PathVariable String id,
+            HttpServletRequest req
     ) {
-        try {
-            ApiResponse apiResponse = new ApiResponse();
-            billService.deleteBillById(id);
-            apiResponse.setMessage("Delete bill id:" + id + " successfully");
-        } catch (Exception e) {
-            throw new InternalServerErrorException("");
-        }
+        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
+        logger.info(clientReq + ": Start deleting bill - id:" + id);
+
+        ApiResponse apiResponse = new ApiResponse();
+        billService.deleteBillById(id);
+        apiResponse.setMessage("Delete bill id:" + id + " successfully");
+
+        logger.info(clientReq + ": Successfully deleting bill - id:" + id);
+        return apiResponse;
     }
 }

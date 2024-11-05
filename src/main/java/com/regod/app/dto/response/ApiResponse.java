@@ -15,7 +15,7 @@ public class ApiResponse<T> {
 
     private T data;
 
-    void setCode(ResponseCode code) {
+    public void setCode(ResponseCode code) {
         this.code = code.get();
     }
 }
