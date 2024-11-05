@@ -48,7 +48,7 @@ public class BillService {
 
         billFound.setStatus(request.getStatus());
 
-        productOrderRepository.deleteAllByPOrderIDBillID(billID);
+        productOrderRepository.deleteAllByPOrderID_BillID(billID);
         List<Product> newProducts = new ArrayList<>();
         for (int i = 1; i <= request.getProducts().size(); i++) {
             Product newProduct = new Product();
@@ -91,7 +91,7 @@ public class BillService {
         billDetailResponse.setSupplierBillID(billFound.getSupplierBillID());
         billDetailResponse.setImgURl(billFound.getImgURl());
 
-        billDetailResponse.setProducts(productOrderRepository.findAllByPOrderIDBillID(billFound.getId()));
+        billDetailResponse.setProducts(productOrderRepository.findAllByPOrderID_BillID(billFound.getId()));
 
         return billDetailResponse;
 
@@ -132,7 +132,7 @@ public class BillService {
 
         billFound.setStatus(request.getStatus());
 
-        productOrderRepository.deleteAllByPOrderIDBillID(id);
+        productOrderRepository.deleteAllByPOrderID_BillID(id);
         List<Product> newProducts = new ArrayList<>();
         for (int i = 1; i <= request.getProducts().size(); i++) {
             Product newProduct = new Product();

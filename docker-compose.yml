@@ -26,6 +26,7 @@ services:
   mysql:
     container_name: db_mysql
     image: mysql:latest
+    # MYSQL_ROOT_PASSWORD: pro123
     # Map your host's port 3306 to inner container's port 3306
     ports:
       - 3306:3306
@@ -33,12 +34,15 @@ services:
       - mysql_volume:/var/lib/mysql
     networks:
       - net
+    environment:
+      MYSQL_ROOT_PASSWORD: pro123
+      MYSQL_DATABASE: budgetsystem
 
 # Create a volume name mysql_volume, otherwise use the existing
 volumes:
   mysql_volume:
 
 # Create a network name net, mode: bridge
-network:
+networks:
   net:
     driver: bridge
