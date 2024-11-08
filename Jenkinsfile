@@ -44,14 +44,8 @@ pipeline {
             }
             post {
                 success {
-                    script {
-                                    env.BACKUP = input message: 'User input required',
-                                    ok: 'Deploy!',
-                                    parameters: [choice(name: 'Branch to deploy', choices: "Yes\nNo", description: 'What branch you wont deploy?')]
-                    }
-
-                    echo "done";
-                    //deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.6:8080')], contextPath: '/api', war: '**/*.war'
+                    input message: 'Back up?'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.6:8080')], contextPath: '/api', war: '**/*.war'
                 }
             }
         }
