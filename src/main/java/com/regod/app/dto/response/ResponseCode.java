@@ -9,7 +9,7 @@ public enum ResponseCode {
     NOT_FOUND(404),
     INTERNAL_SERVER_ERROR(500);
 
-    private Integer value;
+    private final Integer value;
 
     private ResponseCode(Integer value) {
         this.value = value;

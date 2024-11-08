@@ -112,7 +112,6 @@ public class BillService {
 
 
     public void updateBillById(String id, BillModifyRequest request) {
-        //to be imple
         Optional<Bill> bill = billRepository.findById(id);
         if (bill.isEmpty()) {
             throw new NotFoundException("Bill not found");

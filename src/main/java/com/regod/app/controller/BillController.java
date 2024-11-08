@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -33,43 +34,32 @@ public class BillController {
     private final Logger logger = LoggerFactory.getLogger(BillController.class);
 
     @GetMapping("")
-//    @Operation(summary = "Get all bills", responses = {
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-//                    responseCode = "200",
-//            )
-//    })
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<List<Bill>> findAll(
-            HttpServletRequest req
-    ) {
-        final String clientReq = req.getHeader("X-FORWARDED-FOR") == null
-                ? req.getRemoteAddr()
-                : req.getHeader("X-FORWARDED_FOR")
-                + " - " + req.getRequestURI();
-        logger.info(clientReq + ": Start getting all bills");
+    ApiResponse<List<Bill>> findAll() {
+        final String reqId = UUID.randomUUID().toString();
+        logger.info(reqId.concat(": Start getting all bills"));
 
         ApiResponse<List<Bill>> apiResponse = new ApiResponse<>();
         apiResponse.setData(billService.getALlBills());
         apiResponse.setMessage("Get all bills successfully");
 
-        logger.info(clientReq + ": Successfully getting all bills");
+        logger.info(reqId.concat(": Successfully getting all bills"));
         return apiResponse;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<Bill> findOne(
-            @PathVariable String id,
-            HttpServletRequest req
+            @PathVariable String id
     ) {
-        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
-        logger.info(clientReq + ": Start getting bill - id: " + id);
+        final String reqId = UUID.randomUUID().toString();
+        logger.info(reqId.concat(": Start getting bill - id: " + id));
 
         ApiResponse<Bill> apiResponse = new ApiResponse<>();
         apiResponse.setData(billService.getBillById(id));
         apiResponse.setMessage("Get bill id:" + id+ " successfully");
 
-        logger.info(clientReq + " - Successfully getting bill - id:" + id);
+        logger.info(reqId.concat(": Successfully getting bill - id:" + id));
         return apiResponse;
     }
 
@@ -77,11 +67,10 @@ public class BillController {
     @ResponseStatus(HttpStatus.CREATED)
     ApiResponse<Bill> create(
             @Validated @RequestBody BillCreationRequest request,
-            BindingResult bindingResult,
-            HttpServletRequest req
+            BindingResult bindingResult
     ) {
-        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
-        logger.info(clientReq + ": Start creating bill");
+        final String reqId = UUID.randomUUID().toString();
+        logger.info(reqId.concat(": Start creating bill"));
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult
@@ -96,7 +85,7 @@ public class BillController {
         apiResponse.setData(billService.createBill(request));
         apiResponse.setMessage("Create bill successfully");
 
-        logger.info(clientReq + ": Successfully creating bill");
+        logger.info(reqId.concat(": Successfully creating bill"));
         return apiResponse;
     }
 
@@ -105,11 +94,10 @@ public class BillController {
     ApiResponse<?> update(
             @PathVariable String id,
             @Validated @RequestBody BillModifyRequest data,
-            BindingResult bindingResult,
-            HttpServletRequest req
+            BindingResult bindingResult
     ) {
-        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
-        logger.info(clientReq + ": Start updating bill - id:" + id);
+        final String reqId = UUID.randomUUID().toString();
+        logger.info(reqId.concat(": Start updating bill - id:" + id));
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult
@@ -124,7 +112,7 @@ public class BillController {
         billService.updateBillById(id, data);
         apiResponse.setMessage("Update bill id:" + id+ " successfully");
 
-        logger.info(clientReq + ": Successfully updating bill - id:" + id);
+        logger.info(reqId.concat(": Successfully updating bill - id:" + id));
         return apiResponse;
     }
 
@@ -132,17 +120,16 @@ public class BillController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<?> delete(
-            @PathVariable String id,
-            HttpServletRequest req
+            @PathVariable String id
     ) {
-        final String clientReq = req.getRequestURL().toString() + " - " + req.getRequestURI();
-        logger.info(clientReq + ": Start deleting bill - id:" + id);
+        final String reqId = UUID.randomUUID().toString();
+        logger.info(reqId.concat(": Start deleting bill - id:" + id));
 
         ApiResponse<?> apiResponse = new ApiResponse();
         billService.deleteBillById(id);
         apiResponse.setMessage("Delete bill id:" + id + " successfully");
 
-        logger.info(clientReq + ": Successfully deleting bill - id:" + id);
+        logger.info(reqId.concat(": Successfully deleting bill - id:" + id));
         return apiResponse;
     }
 }

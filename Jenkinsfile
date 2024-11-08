@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'openjdk:17-debian'
+            args '-v $HOME/.m2:/root/.m2'
+        }
+    }
 
 //     environment {
 //         CRED_ID = 'tomcat'
@@ -41,6 +46,12 @@ pipeline {
             steps {
                 echo '>>> Deploy'
                 deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.2:8080')], contextPath: '/api', war: '**/*.war'
+            }
+            post {
+                success {
+                    input message: 'Back up?'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.6:8080')], contextPath: '/api', war: '**/*.war'
+                }
             }
         }
 

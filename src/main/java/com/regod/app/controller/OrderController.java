@@ -1,11 +1,11 @@
 package com.regod.app.controller;
 
-import com.regod.app.dto.request.CreateInvoiceDto;
-import com.regod.app.dto.request.ModifyOrderDto;
+import com.regod.app.dto.request.CreateOrderDto;
+import com.regod.app.dto.request.ModifyRequestDto;
 import com.regod.app.dto.response.ApiResponse;
 import com.regod.app.dto.response.ResponseCode;
-import com.regod.app.entity.Invoice;
-import com.regod.app.service.InvoiceService;
+import com.regod.app.entity.Order;
+import com.regod.app.service.OrderService;
 import com.regod.app.utils.exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,51 +21,51 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/invoices")
-public class InvoiceController {
+@RequestMapping("/request")
+public class OrderController {
     @Autowired
-    private InvoiceService invoiceService;
+    private OrderService orderService;
 
-    private final Logger logger = LoggerFactory.getLogger(InvoiceController.class);
+    private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<List<Invoice>> findAll() {
+    ApiResponse<List<Order>> findAll() {
         final String reqId = UUID.randomUUID().toString();
-        logger.info(reqId.concat(": Start getting all invoices"));
+        logger.info(reqId.concat(": Start getting all requests"));
 
-        ApiResponse<List<Invoice>> res = new ApiResponse<>();
-        res.setData(invoiceService.findAll());
-        res.setMessage("Get all invoice successfully");
+        ApiResponse<List<Order>> res = new ApiResponse<>();
+        res.setData(orderService.findAll());
+        res.setMessage("Get all requests successfully");
 
-        logger.info(reqId.concat(": Successfully getting all invoices"));
+        logger.info(reqId.concat(": Successfully getting all requests"));
         return res;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<Invoice> findOne(
+    ApiResponse<Order> findOne(
             @PathVariable String id
     ) {
         final String reqId = UUID.randomUUID().toString();
-        logger.info(reqId.concat(": Start getting invoice - id: " + id));
+        logger.info(reqId.concat(": Start getting request - id: " + id));
 
-        ApiResponse<Invoice> res = new ApiResponse<>();
-        res.setData(invoiceService.find(id));
-        res.setMessage("Get invoice id:" + id + " successfully");
+        ApiResponse<Order> res = new ApiResponse<>();
+        res.setData(orderService.find(id));
+        res.setMessage("Get request id:" + id + " successfully");
 
-        logger.info(reqId.concat(": Successfully getting invoice - id: " + id));
+        logger.info(reqId.concat(": Successfully getting request - id: " + id));
         return res;
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ApiResponse<Invoice> create(
-            @Validated @RequestBody CreateInvoiceDto data,
+    ApiResponse<Order> create(
+            @Validated @RequestBody CreateOrderDto data,
             BindingResult bindingResult
     ) {
         final String reqId = UUID.randomUUID().toString();
-        logger.info(reqId.concat(": Start creating new invoice"));
+        logger.info(reqId.concat(": Start creating new request"));
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult
@@ -76,12 +76,12 @@ public class InvoiceController {
             throw new BadRequestException(msg);
         }
 
-        ApiResponse<Invoice> res = new ApiResponse<>();
-        res.setData(invoiceService.create(data));
-        res.setMessage("Create invoice successfully");
+        ApiResponse<Order> res = new ApiResponse<>();
+        res.setData(orderService.create(data));
+        res.setMessage("Create request successfully");
         res.setCode(ResponseCode.CREATED);
 
-        logger.info(reqId.concat(": Successfully creating new invoice"));
+        logger.info(reqId.concat(": Successfully creating request invoice"));
         return res;
     }
 
@@ -89,11 +89,11 @@ public class InvoiceController {
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<?> update(
             @PathVariable String id,
-            @Validated @RequestBody ModifyOrderDto data,
+            @Validated @RequestBody ModifyRequestDto data,
             BindingResult bindingResult
     ) {
         final String reqId = UUID.randomUUID().toString();
-        logger.info(reqId.concat(": Start updating invoice - id: " + id));
+        logger.info(reqId.concat(": Start updating request - id: " + id));
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult
@@ -105,10 +105,10 @@ public class InvoiceController {
         }
 
         ApiResponse<?> res = new ApiResponse<>();
-        invoiceService.updateById(id, data);
-        res.setMessage("Update bill id:" + id + " successfully");
+        orderService.updateById(id, data);
+        res.setMessage("Update request id:" + id + " successfully");
 
-        logger.info(reqId.concat(": Successfully updating invoice - id: " + id));
+        logger.info(reqId.concat(": Successfully updating request - id: " + id));
         return res;
     }
 
@@ -118,13 +118,13 @@ public class InvoiceController {
             @PathVariable String id
     ) {
         final String reqId = UUID.randomUUID().toString();
-        logger.info(reqId.concat(": Start deleting invoice - id: " + id));
+        logger.info(reqId.concat(": Start deleting request - id: " + id));
 
         ApiResponse<?> res = new ApiResponse<>();
-        invoiceService.deleteById(id);
-        res.setMessage("Delete bill id:" + id + " successfully");
+        orderService.deleteById(id);
+        res.setMessage("Delete request id:" + id + " successfully");
 
-        logger.info(reqId.concat(": Successfully deleting invoice - id: " + id));
+        logger.info(reqId.concat(": Successfully deleting request - id: " + id));
         return res;
     }
 }

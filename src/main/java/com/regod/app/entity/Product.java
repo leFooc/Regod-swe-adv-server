@@ -17,4 +17,5 @@ public class Product{
     private int total;
 
 
+
 }
