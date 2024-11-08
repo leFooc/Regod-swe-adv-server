@@ -22,7 +22,10 @@ public class BillDetailResponse {
     private float deposited;
     private long payLeft;
 
-    List<Product> products;
+
+    private List<Product> products;
+
+    private InvoiceResponse invoiceResponse;
 
 
 }

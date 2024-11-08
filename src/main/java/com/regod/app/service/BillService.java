@@ -2,13 +2,18 @@ package com.regod.app.service;
 
 import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.dto.request.BillModifyRequest;
+import com.regod.app.dto.request.InvoiceCreationRequest;
+import com.regod.app.dto.request.InvoiceModifyRequest;
 import com.regod.app.dto.response.BillDetailResponse;
 import com.regod.app.entity.Bill;
+import com.regod.app.entity.Invoice;
 import com.regod.app.entity.Product;
 import com.regod.app.entity.ProductOrderID;
 import com.regod.app.repositories.BillRepository;
+import com.regod.app.repositories.InvoiceRepository;
 import com.regod.app.repositories.ProductOrderRepository;
 import com.regod.app.utils.exceptions.NotFoundException;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +28,8 @@ public class BillService {
 
     @Autowired
     private ProductOrderRepository productOrderRepository;
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     public Bill createBill(BillCreationRequest request){
         /*Bill bill = new Bill();
@@ -147,12 +154,58 @@ public class BillService {
 
     }
 
+
+    public void addInvoice(String billID, InvoiceCreationRequest request){
+        Optional<Bill> bill = billRepository.findById(billID);
+        if (bill.isEmpty()) {
+            throw new NotFoundException("Bill not found");
+        }
+        Bill billFound = bill.get();
+        Invoice newInvoice = new Invoice();
+        newInvoice.setBillID(billID);
+        newInvoice.setPaidAmount(request.getPaidAmount());
+        newInvoice.setPaidDate(request.getPaidDate());
+        newInvoice.setImgURL(request.getImgURL());
+        invoiceRepository.save(newInvoice);
+    }
+
+    public void modifyInvoice(String billID, InvoiceModifyRequest request){
+        Optional<Bill> bill = billRepository.findById(billID);
+        if (bill.isEmpty()) {
+            throw new NotFoundException("Bill not found");
+        }
+        Optional<Invoice> invoice = invoiceRepository.findById(bill.get().getId());
+        if (invoice.isEmpty()) {
+            throw new NotFoundException("Invoice not found");
+        }
+        Invoice newInvoice = invoice.get();
+        newInvoice.setBillID(billID);
+        newInvoice.setPaidAmount(request.getPaidAmount());
+        newInvoice.setPaidDate(request.getPaidDate());
+        newInvoice.setImgURL(request.getImgURL());
+        invoiceRepository.save(newInvoice);
+    }
+
+    public void deleteInvoice(String billID){
+        Optional<Invoice> invoice = invoiceRepository.findById(billID);
+        if (invoice.isEmpty()) {
+            throw new NotFoundException("Invoice not found");
+        }
+        invoiceRepository.deleteById(billID);
+    }
+
+
+
     public void deleteBillById(String id) {
         Optional<Bill> bill = billRepository.findById(id);
         if (bill.isEmpty()) {
             throw new NotFoundException("Bill not found");
         }
         billRepository.deleteById(id);
+        productOrderRepository.deleteAllByPOrderID_BillID(id);
+        invoiceRepository.deleteById(id);
     }
+
+
 
 }

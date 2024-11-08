@@ -11,7 +11,6 @@ import org.springframework.data.annotation.Id;
 public class Invoice {
     @jakarta.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String billID;
     private String paidDate;
     private String paidAmount;
