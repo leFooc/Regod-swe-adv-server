@@ -40,7 +40,14 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '>>> Deploy'
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.4:8080')], contextPath: '/app-test', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.4:8080')], contextPath: '/api', war: '**/*.war'
+            }
+            post {
+                success {
+                    echo '>>> Continue to backup? Press any key'
+                    sh 'read -n 1'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.6:8080')], contextPath: '/api', war: '**/*.war'
+                }
             }
         }
 
