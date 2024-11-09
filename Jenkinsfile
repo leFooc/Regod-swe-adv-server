@@ -40,12 +40,12 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo '>>> Deploy'
-                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.2:8080')], contextPath: '/api', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.4:8080')], contextPath: '/api', war: '**/*.war'
             }
             post {
                 success {
                     input message: 'Back up?'
-                    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.6:8080')], contextPath: '/api', war: '**/*.war'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://172.18.0.5:8080')], contextPath: '/api', war: '**/*.war'
                 }
             }
         }
