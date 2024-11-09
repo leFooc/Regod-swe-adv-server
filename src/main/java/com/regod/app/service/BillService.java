@@ -14,6 +14,8 @@ import com.regod.app.repositories.InvoiceRepository;
 import com.regod.app.repositories.ProductOrderRepository;
 import com.regod.app.utils.exceptions.NotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ import java.util.UUID;
 
 @Service
 public class BillService {
+    private Logger logger = LoggerFactory.getLogger("debug");
+
     @Autowired
     private BillRepository billRepository;
 
@@ -56,6 +60,8 @@ public class BillService {
         billFound.setDeposited(request.getDeposited());
 
         billFound.setStatus(request.getStatus());
+
+        logger.debug(request.getProducts().toString());
 
         productOrderRepository.deleteAllByPOrderID_BillID(billID);
         List<Product> newProducts = new ArrayList<>();
