@@ -10,6 +10,7 @@ import com.regod.app.entity.Bill;
 import com.regod.app.entity.Invoice;
 import com.regod.app.repositories.BillRepository;
 import com.regod.app.repositories.InvoiceRepository;
+import com.regod.app.utils.exceptions.BadRequestException;
 import com.regod.app.utils.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,12 @@ public class InvoiceService {
         BillModifyRequest updateBill = new BillModifyRequest();
         updateBill.setStatus("PAID");
         billService.updateBillById(id, updateBill);
+
+        Optional<Invoice> exist = invoiceRepository.findById(id);
+
+        if (exist.isPresent()) {
+            throw new BadRequestException("Invoice existed");
+        }
 
         Invoice record = new Invoice();
         record.setBillID(id);
