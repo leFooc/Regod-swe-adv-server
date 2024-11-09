@@ -16,7 +16,6 @@ import java.util.List;
 public class Bill {
     @jakarta.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String billName;
     private String departmentName;

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BillService {
@@ -40,7 +41,8 @@ public class BillService {
         return billRepository.save(bill);
         */
         Bill billFound = new Bill();
-        String billID = billFound.getId();
+        String billID = UUID.randomUUID().toString();
+        billFound.setId(billID);
         billFound.setBillName(request.getBillName());
         billFound.setCreateDate(request.getCreateDate());
         billFound.setDueDate(request.getDueDate());
