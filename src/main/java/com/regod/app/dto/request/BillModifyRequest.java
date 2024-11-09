@@ -20,7 +20,7 @@ public class BillModifyRequest {
     private float deposited;
     private long payLeft;
 
-    List<ProductListRequest> products;
+    List<ProductListRequest> Products;
 
 
 }
