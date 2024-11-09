@@ -154,44 +154,44 @@ public class BillService {
     }
 
 
-    public void addInvoice(String billID, InvoiceCreationRequest request){
-        Optional<Bill> bill = billRepository.findById(billID);
-        if (bill.isEmpty()) {
-            throw new NotFoundException("Bill not found");
-        }
-        Bill billFound = bill.get();
-        Invoice newInvoice = new Invoice();
-        newInvoice.setBillID(billID);
-        newInvoice.setPaidAmount(request.getPaidAmount());
-        newInvoice.setPaidDate(request.getPaidDate());
-        newInvoice.setImgURL(request.getImgURL());
-        invoiceRepository.save(newInvoice);
-    }
-
-    public void modifyInvoice(String billID, InvoiceModifyRequest request){
-        Optional<Bill> bill = billRepository.findById(billID);
-        if (bill.isEmpty()) {
-            throw new NotFoundException("Bill not found");
-        }
-        Optional<Invoice> invoice = invoiceRepository.findById(bill.get().getId());
-        if (invoice.isEmpty()) {
-            throw new NotFoundException("Invoice not found");
-        }
-        Invoice newInvoice = invoice.get();
-        newInvoice.setBillID(billID);
-        newInvoice.setPaidAmount(request.getPaidAmount());
-        newInvoice.setPaidDate(request.getPaidDate());
-        newInvoice.setImgURL(request.getImgURL());
-        invoiceRepository.save(newInvoice);
-    }
-
-    public void deleteInvoice(String billID){
-        Optional<Invoice> invoice = invoiceRepository.findById(billID);
-        if (invoice.isEmpty()) {
-            throw new NotFoundException("Invoice not found");
-        }
-        invoiceRepository.deleteById(billID);
-    }
+//    public void addInvoice(String billID, InvoiceCreationRequest request){
+//        Optional<Bill> bill = billRepository.findById(billID);
+//        if (bill.isEmpty()) {
+//            throw new NotFoundException("Bill not found");
+//        }
+//        Bill billFound = bill.get();
+//        Invoice newInvoice = new Invoice();
+//        newInvoice.setBillID(billID);
+//        newInvoice.setPaidAmount(request.getPaidAmount());
+//        newInvoice.setPaidDate(request.getPaidDate());
+//        newInvoice.setImgURL(request.getImgURL());
+//        invoiceRepository.save(newInvoice);
+//    }
+//
+//    public void modifyInvoice(String billID, InvoiceModifyRequest request){
+//        Optional<Bill> bill = billRepository.findById(billID);
+//        if (bill.isEmpty()) {
+//            throw new NotFoundException("Bill not found");
+//        }
+//        Optional<Invoice> invoice = invoiceRepository.findById(bill.get().getId());
+//        if (invoice.isEmpty()) {
+//            throw new NotFoundException("Invoice not found");
+//        }
+//        Invoice newInvoice = invoice.get();
+//        newInvoice.setBillID(billID);
+//        newInvoice.setPaidAmount(request.getPaidAmount());
+//        newInvoice.setPaidDate(request.getPaidDate());
+//        newInvoice.setImgURL(request.getImgURL());
+//        invoiceRepository.save(newInvoice);
+//    }
+//
+//    public void deleteInvoice(String billID){
+//        Optional<Invoice> invoice = invoiceRepository.findById(billID);
+//        if (invoice.isEmpty()) {
+//            throw new NotFoundException("Invoice not found");
+//        }
+//        invoiceRepository.deleteById(billID);
+//    }
 
 
 

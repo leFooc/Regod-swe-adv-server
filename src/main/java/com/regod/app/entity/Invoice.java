@@ -16,7 +16,5 @@ public class Invoice {
     @NonNull
     private String paidDate;
     @NonNull
-    private String paidAmount;
-    @NonNull
     private String imgURL;
 }

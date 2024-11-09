@@ -1,8 +1,10 @@
 package com.regod.app.controller;
 
 import com.regod.app.dto.request.CreateInvoiceDto;
-import com.regod.app.dto.request.ModifyOrderDto;
+import com.regod.app.dto.request.ModifyInvoiceDto;
 import com.regod.app.dto.response.ApiResponse;
+import com.regod.app.dto.response.InvoiceDetailResponse;
+import com.regod.app.dto.response.InvoiceResponse;
 import com.regod.app.dto.response.ResponseCode;
 import com.regod.app.entity.Invoice;
 import com.regod.app.service.InvoiceService;
@@ -30,11 +32,11 @@ public class InvoiceController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<List<Invoice>> findAll() {
+    ApiResponse<List<InvoiceResponse>> findAll() {
         final String reqId = UUID.randomUUID().toString();
         logger.info(reqId.concat(": Start getting all invoices"));
 
-        ApiResponse<List<Invoice>> res = new ApiResponse<>();
+        ApiResponse<List<InvoiceResponse>> res = new ApiResponse<>();
         res.setData(invoiceService.findAll());
         res.setMessage("Get all invoice successfully");
 
@@ -44,7 +46,7 @@ public class InvoiceController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<Invoice> findOne(
+    ApiResponse<InvoiceDetailResponse> findOne(
             @PathVariable String id
     ) {
         final String reqId = UUID.randomUUID().toString();
@@ -60,12 +62,17 @@ public class InvoiceController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ApiResponse<Invoice> create(
+    ApiResponse<InvoiceResponse> create(
+            @RequestParam(name="id") String billId,
             @Validated @RequestBody CreateInvoiceDto data,
             BindingResult bindingResult
     ) {
         final String reqId = UUID.randomUUID().toString();
         logger.info(reqId.concat(": Start creating new invoice"));
+
+        if (billId == null) {
+            throw new BadRequestException("No bill id");
+        }
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult
@@ -77,7 +84,7 @@ public class InvoiceController {
         }
 
         ApiResponse<Invoice> res = new ApiResponse<>();
-        res.setData(invoiceService.create(data));
+        res.setData(invoiceService.create(id, data));
         res.setMessage("Create invoice successfully");
         res.setCode(ResponseCode.CREATED);
 
@@ -89,7 +96,7 @@ public class InvoiceController {
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<?> update(
             @PathVariable String id,
-            @Validated @RequestBody ModifyOrderDto data,
+            @Validated @RequestBody ModifyInvoiceDto data,
             BindingResult bindingResult
     ) {
         final String reqId = UUID.randomUUID().toString();

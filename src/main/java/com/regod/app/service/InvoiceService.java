@@ -1,7 +1,11 @@
 package com.regod.app.service;
 
 import com.regod.app.dto.request.CreateInvoiceDto;
-import com.regod.app.dto.request.ModifyOrderDto;
+import com.regod.app.dto.request.ModifyInvoiceDto;
+import com.regod.app.dto.response.BillDetailResponse;
+import com.regod.app.dto.response.InvoiceDetailResponse;
+import com.regod.app.dto.response.InvoiceResponse;
+import com.regod.app.entity.Bill;
 import com.regod.app.entity.Invoice;
 import com.regod.app.repositories.BillRepository;
 import com.regod.app.repositories.InvoiceRepository;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class InvoiceService {
@@ -18,33 +23,69 @@ public class InvoiceService {
     private InvoiceRepository invoiceRepository;
 
     @Autowired
-    private BillRepository billRepository;
+    private BillService billService;
 
-    public List<Invoice> findAll() {
-        return invoiceRepository.findAll();
+    public List<InvoiceResponse> findAll() {
+        List<Invoice> invoices = invoiceRepository.findAll();
+        return invoices.stream().map(invoice -> {
+                Bill bill = billService.getBillById(invoice.getBillID());
+                return new InvoiceResponse(
+                        invoice.getBillID(),
+                        invoice.getPaidDate(),
+                        invoice.getImgURL(),
+
+                        bill.getBillName(),
+                        bill.getDepartmentName(),
+                        bill.getCreateDate(),
+                        bill.getDueDate(),
+                        bill.getStatus(),
+
+                        bill.getStatus(),
+                        bill.getTotalCost(),
+                        bill.getDeposited()
+                );
+            }
+        )
+        .collect(Collectors.toList());
     }
 
-    public Invoice find(String id) {
+    public InvoiceDetailResponse find(String id) {
         Optional<Invoice> invoice = invoiceRepository.findById(id);
 
         if (invoice.isEmpty()) {
             throw new NotFoundException("Invoice not found");
         }
 
-        return invoice.get();
+        BillDetailResponse bill = billService.getBillDetail(invoice.get().getBillID());
+        return new InvoiceDetailResponse(
+                invoice.get().getBillID(),
+                invoice.get().getPaidDate(),
+                invoice.get().getImgURL(),
+
+                bill.getBillName(),
+                bill.getDepartmentName(),
+                bill.getCreateDate(),
+                bill.getDueDate(),
+                bill.getStatus(),
+
+                bill.getStatus(),
+                bill.getTotalCost(),
+                bill.getDeposited(),
+
+                bill.getProducts()
+        );
     }
 
     public Invoice create(CreateInvoiceDto data) {
         Invoice record = new Invoice(
                 data.getPaidDate(),
-                data.getPaidAmount(),
                 data.getImgURL()
         );
 
         return invoiceRepository.save(record);
     }
 
-    public void updateById(String id, ModifyOrderDto data) {
+    public void updateById(String id, ModifyInvoiceDto data) {
         Optional<Invoice> invoice = invoiceRepository.findById(id);
 
         if (invoice.isEmpty()) {
@@ -54,8 +95,6 @@ public class InvoiceService {
         Invoice res = invoice.get();
         if (data.getPaidDate() != null)
             res.setPaidDate(data.getPaidDate());
-        if (data.getPaidAmount() != null)
-            res.setPaidAmount(data.getPaidAmount());
         if (data.getImgURL() != null)
             res.setImgURL(data.getImgURL());
 

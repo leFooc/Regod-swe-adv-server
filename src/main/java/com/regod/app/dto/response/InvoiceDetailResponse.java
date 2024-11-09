@@ -1,11 +1,14 @@
 package com.regod.app.dto.response;
 
+import com.regod.app.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Data
-public class InvoiceResponse {
+public class InvoiceDetailResponse {
     private String billID;
     private String paidDate;
     private String imgURL;
@@ -21,4 +24,5 @@ public class InvoiceResponse {
     private int totalCost;
     private float deposited;
 
+    private List<Product> products;
 }
