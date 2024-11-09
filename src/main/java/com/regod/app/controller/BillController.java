@@ -3,6 +3,7 @@ package com.regod.app.controller;
 import com.regod.app.dto.request.BillCreationRequest;
 import com.regod.app.dto.request.BillModifyRequest;
 import com.regod.app.dto.response.ApiResponse;
+import com.regod.app.dto.response.BillDetailResponse;
 import com.regod.app.entity.Bill;
 import com.regod.app.service.BillService;
 import com.regod.app.utils.exceptions.BadRequestException;
@@ -49,14 +50,14 @@ public class BillController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<Bill> findOne(
+    ApiResponse<BillDetailResponse> findOne(
             @PathVariable String id
     ) {
         final String reqId = UUID.randomUUID().toString();
         logger.info(reqId.concat(": Start getting bill - id: " + id));
 
-        ApiResponse<Bill> apiResponse = new ApiResponse<>();
-        apiResponse.setData(billService.getBillById(id));
+        ApiResponse<BillDetailResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setData(billService.getBillDetail(id));
         apiResponse.setMessage("Get bill id:" + id+ " successfully");
 
         logger.info(reqId.concat(": Successfully getting bill - id:" + id));
