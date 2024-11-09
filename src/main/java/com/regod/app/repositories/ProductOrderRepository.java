@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductOrderRepository extends JpaRepository<Product, ProductOrderID> {
-    List<Product> findAllByPOrderID_BillID(String billID);
+public interface ProductOrderRepository extends JpaRepository<Product, String> {
+    List<Product> findAllByBillId(String billID);
 
-    void deleteAllByPOrderID_BillID(String billID);
+    void deleteAllByBillId(String billID);
 }

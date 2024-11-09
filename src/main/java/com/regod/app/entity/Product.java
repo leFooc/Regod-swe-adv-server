@@ -1,21 +1,19 @@
 package com.regod.app.entity;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.validator.constraints.UUID;
+
 import java.io.Serializable;
 
 @Data
 @Entity
 public class Product{
-    @EmbeddedId
-    private ProductOrderID POrderID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String name;
     private int price;
     private int quantity;
     private int total;
-
-
-
+    private String billId;
 }

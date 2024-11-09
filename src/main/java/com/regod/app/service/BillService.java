@@ -14,20 +14,18 @@ import com.regod.app.repositories.InvoiceRepository;
 import com.regod.app.repositories.ProductOrderRepository;
 import com.regod.app.utils.exceptions.NotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional
 @Service
 public class BillService {
-    private Logger logger = LoggerFactory.getLogger("debug");
-
     @Autowired
     private BillRepository billRepository;
 
@@ -61,19 +59,16 @@ public class BillService {
 
         billFound.setStatus(request.getStatus());
 
-        logger.debug(request.getProducts().toString());
-
-        productOrderRepository.deleteAllByPOrderID_BillID(billID);
-        List<Product> newProducts = new ArrayList<>();
-        for (int i = 1; i <= request.getProducts().size(); i++) {
+        productOrderRepository.deleteAllByBillId(billID);
+        for (int i = 1; i <= request.getListProducts().size(); i++) {
             Product newProduct = new Product();
-            newProduct.setName(request.getProducts().get(i-1).getName());
-            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
-            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
-            newProduct.setPOrderID(new ProductOrderID(billID, "" + i));
-            newProducts.add(newProduct);
+            newProduct.setName(request.getListProducts().get(i-1).getName());
+            newProduct.setPrice(request.getListProducts().get(i-1).getPrice());
+            newProduct.setQuantity(request.getListProducts().get(i-1).getQuantity());
+            newProduct.setBillId(billID);
+            productOrderRepository.save(newProduct);
         }
-        productOrderRepository.saveAll(newProducts);
+
         return billRepository.save(billFound);
     }
 
@@ -106,7 +101,7 @@ public class BillService {
         billDetailResponse.setSupplierBillID(billFound.getSupplierBillID());
         billDetailResponse.setImgURl(billFound.getImgURl());
 
-        billDetailResponse.setProducts(productOrderRepository.findAllByPOrderID_BillID(billFound.getId()));
+        billDetailResponse.setProducts(productOrderRepository.findAllByBillId(billFound.getId()));
 
         return billDetailResponse;
 
@@ -163,17 +158,18 @@ public class BillService {
             billFound.setDeposited(request.getDeposited());
         }
 
-        productOrderRepository.deleteAllByPOrderID_BillID(id);
-        List<Product> newProducts = new ArrayList<>();
-        for (int i = 1; i <= request.getProducts().size(); i++) {
-            Product newProduct = new Product();
-            newProduct.setName(request.getProducts().get(i-1).getName());
-            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
-            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
-            newProduct.setPOrderID(new ProductOrderID(id, "" + i));
-            newProducts.add(newProduct);
+        if (request.getProducts() != null) {
+            productOrderRepository.deleteAllByBillId(id);
+            for (int i = 1; i <= request.getProducts().size(); i++) {
+                Product newProduct = new Product();
+                newProduct.setName(request.getProducts().get(i-1).getName());
+                newProduct.setPrice(request.getProducts().get(i-1).getPrice());
+                newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
+                newProduct.setBillId(id);
+                productOrderRepository.save(newProduct);
+            }
         }
-        productOrderRepository.saveAll(newProducts);
+
         billRepository.save(billFound);
 
     }
@@ -226,7 +222,7 @@ public class BillService {
             throw new NotFoundException("Bill not found");
         }
         billRepository.deleteById(id);
-        productOrderRepository.deleteAllByPOrderID_BillID(id);
+        productOrderRepository.deleteAllByBillId(id);
         invoiceRepository.deleteById(id);
     }
 
