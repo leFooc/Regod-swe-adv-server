@@ -62,7 +62,7 @@ public class InvoiceController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ApiResponse<Invoice> create(
+    ApiResponse<InvoiceResponse> create(
             @RequestParam String id,
             @Validated @RequestBody CreateInvoiceDto data,
             BindingResult bindingResult
@@ -79,7 +79,7 @@ public class InvoiceController {
             throw new BadRequestException(msg);
         }
 
-        ApiResponse<Invoice> res = new ApiResponse<>();
+        ApiResponse<InvoiceResponse> res = new ApiResponse<>();
         res.setData(invoiceService.create(id, data));
         res.setMessage("Create invoice successfully");
         res.setCode(ResponseCode.CREATED);

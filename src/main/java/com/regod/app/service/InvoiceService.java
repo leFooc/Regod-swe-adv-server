@@ -77,19 +77,31 @@ public class InvoiceService {
         );
     }
 
-    public Invoice create(String id, CreateInvoiceDto data) {
-        try {
-            BillModifyRequest updateBill = new BillModifyRequest();
-            updateBill.setStatus("PAID");
-            billService.updateBillById(id, updateBill);
-        } catch (NotFoundException e){
-            throw new NotFoundException("Bill not found");
-        }
+    public InvoiceResponse create(String id, CreateInvoiceDto data) {
+        BillModifyRequest updateBill = new BillModifyRequest();
+        updateBill.setStatus("PAID");
+        billService.updateBillById(id, updateBill);
+
         Invoice record = new Invoice();
         record.setBillID(id);
         record.setPaidDate(data.getPaidDate());
         record.setImgURL(data.getImgURL());
-        return invoiceRepository.save(record);
+        invoiceRepository.save(record);
+        return new InvoiceResponse(
+                record.getBillID(),
+                record.getPaidDate(),
+                record.getImgURL(),
+
+                updateBill.getBillName(),
+                updateBill.getDepartmentName(),
+                updateBill.getCreateDate(),
+                updateBill.getDueDate(),
+                updateBill.getStatus(),
+
+                updateBill.getStatus(),
+                updateBill.getTotalCost(),
+                updateBill.getDeposited()
+        );
     }
 
     public void updateById(String id, ModifyInvoiceDto data) {
