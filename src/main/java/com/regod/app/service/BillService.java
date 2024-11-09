@@ -55,17 +55,17 @@ public class BillService {
 
         billFound.setStatus(request.getStatus());
 
-//        productOrderRepository.deleteAllByPOrderID_BillID(billID);
-//        List<Product> newProducts = new ArrayList<>();
-//        for (int i = 1; i <= request.getProducts().size(); i++) {
-//            Product newProduct = new Product();
-//            newProduct.setName(request.getProducts().get(i-1).getName());
-//            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
-//            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
-//            newProduct.setPOrderID(new ProductOrderID(billID, "" + i));
-//            newProducts.add(newProduct);
-//        }
-//        productOrderRepository.saveAll(newProducts);
+        productOrderRepository.deleteAllByPOrderID_BillID(billID);
+        List<Product> newProducts = new ArrayList<>();
+        for (int i = 1; i <= request.getProducts().size(); i++) {
+            Product newProduct = new Product();
+            newProduct.setName(request.getProducts().get(i-1).getName());
+            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
+            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
+            newProduct.setPOrderID(new ProductOrderID(billID, "" + i));
+            newProducts.add(newProduct);
+        }
+        productOrderRepository.saveAll(newProducts);
         return billRepository.save(billFound);
     }
 
@@ -124,19 +124,36 @@ public class BillService {
             throw new NotFoundException("Bill not found");
         }
         Bill billFound = bill.get();
-        billFound.setBillName(request.getBillName());
-        billFound.setCreateDate(request.getCreateDate());
-        billFound.setDueDate(request.getDueDate());
-        billFound.setDepartmentName(request.getDepartmentName());
-        billFound.setDueDate(request.getDueDate());
-        billFound.setSupplierBillID(request.getSupplierBillID());
-        billFound.setImgURl(request.getImgURl());
-
-        billFound.setTotalCost(request.getTotalCost());
-        billFound.setCost(request.getPayLeft());
-        billFound.setDeposited(request.getDeposited());
-
-        billFound.setStatus(request.getStatus());
+        if (request.getBillName() != null) {
+            billFound.setBillName(request.getBillName());
+        }
+        if (request.getCreateDate() != null) {
+            billFound.setCreateDate(request.getCreateDate());
+        }
+        if (request.getDueDate() != null) {
+            billFound.setDueDate(request.getDueDate());
+        }
+        if (request.getDepartmentName() != null) {
+            billFound.setDepartmentName(request.getDepartmentName());
+        }
+        if (request.getSupplierBillID() != null) {
+            billFound.setSupplierBillID(request.getSupplierBillID());
+        }
+        if (request.getImgURl() != null) {
+            billFound.setImgURl(request.getImgURl());
+        }
+        if (request.getStatus() != null) {
+            billFound.setStatus(request.getStatus());
+        }
+        if(request.getTotalCost() > 0){
+            billFound.setTotalCost(request.getTotalCost());
+        }
+        if(request.getPayLeft() > 0){
+            billFound.setCost(request.getPayLeft());
+        }
+        if(request.getDeposited() > 0){
+            billFound.setDeposited(request.getDeposited());
+        }
 
         productOrderRepository.deleteAllByPOrderID_BillID(id);
         List<Product> newProducts = new ArrayList<>();

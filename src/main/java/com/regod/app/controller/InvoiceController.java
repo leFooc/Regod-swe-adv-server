@@ -52,7 +52,7 @@ public class InvoiceController {
         final String reqId = UUID.randomUUID().toString();
         logger.info(reqId.concat(": Start getting invoice - id: " + id));
 
-        ApiResponse<Invoice> res = new ApiResponse<>();
+        ApiResponse<InvoiceDetailResponse> res = new ApiResponse<>();
         res.setData(invoiceService.find(id));
         res.setMessage("Get invoice id:" + id + " successfully");
 
@@ -62,17 +62,13 @@ public class InvoiceController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    ApiResponse<InvoiceResponse> create(
-            @RequestParam(name="id") String billId,
+    ApiResponse<Invoice> create(
+            @RequestParam String id,
             @Validated @RequestBody CreateInvoiceDto data,
             BindingResult bindingResult
     ) {
         final String reqId = UUID.randomUUID().toString();
         logger.info(reqId.concat(": Start creating new invoice"));
-
-        if (billId == null) {
-            throw new BadRequestException("No bill id");
-        }
 
         if (bindingResult.hasErrors()) {
             String msg = bindingResult

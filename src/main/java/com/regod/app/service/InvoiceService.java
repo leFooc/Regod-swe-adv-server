@@ -1,5 +1,6 @@
 package com.regod.app.service;
 
+import com.regod.app.dto.request.BillModifyRequest;
 import com.regod.app.dto.request.CreateInvoiceDto;
 import com.regod.app.dto.request.ModifyInvoiceDto;
 import com.regod.app.dto.response.BillDetailResponse;
@@ -76,12 +77,18 @@ public class InvoiceService {
         );
     }
 
-    public Invoice create(CreateInvoiceDto data) {
-        Invoice record = new Invoice(
-                data.getPaidDate(),
-                data.getImgURL()
-        );
-
+    public Invoice create(String id, CreateInvoiceDto data) {
+        try {
+            BillModifyRequest updateBill = new BillModifyRequest();
+            updateBill.setStatus("PAID");
+            billService.updateBillById(id, updateBill);
+        } catch (NotFoundException e){
+            throw new NotFoundException("Bill not found");
+        }
+        Invoice record = new Invoice();
+        record.setBillID(id);
+        record.setPaidDate(data.getPaidDate());
+        record.setImgURL(data.getImgURL());
         return invoiceRepository.save(record);
     }
 
