@@ -25,5 +25,5 @@ public class BillCreationRequest {
     private float deposited;
     private long payLeft;
 
-    List<ProductListRequest> products;
+    List<ProductListRequest> Products;
 }
