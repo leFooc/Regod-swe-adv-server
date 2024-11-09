@@ -55,17 +55,17 @@ public class BillService {
 
         billFound.setStatus(request.getStatus());
 
-        productOrderRepository.deleteAllByPOrderID_BillID(billID);
-        List<Product> newProducts = new ArrayList<>();
-        for (int i = 1; i <= request.getProducts().size(); i++) {
-            Product newProduct = new Product();
-            newProduct.setName(request.getProducts().get(i-1).getName());
-            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
-            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
-            newProduct.setPOrderID(new ProductOrderID(billID, "" + i));
-            newProducts.add(newProduct);
-        }
-        productOrderRepository.saveAll(newProducts);
+//        productOrderRepository.deleteAllByPOrderID_BillID(billID);
+//        List<Product> newProducts = new ArrayList<>();
+//        for (int i = 1; i <= request.getProducts().size(); i++) {
+//            Product newProduct = new Product();
+//            newProduct.setName(request.getProducts().get(i-1).getName());
+//            newProduct.setPrice(request.getProducts().get(i-1).getPrice());
+//            newProduct.setQuantity(request.getProducts().get(i-1).getQuantity());
+//            newProduct.setPOrderID(new ProductOrderID(billID, "" + i));
+//            newProducts.add(newProduct);
+//        }
+//        productOrderRepository.saveAll(newProducts);
         return billRepository.save(billFound);
     }
 

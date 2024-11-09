@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'openjdk:17-debian'
-            args '-v $HOME/.m2:/root/.m2'
-        }
-    }
+    agent any
 
 //     environment {
 //         CRED_ID = 'tomcat'
